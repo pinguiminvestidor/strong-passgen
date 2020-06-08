@@ -1,0 +1,100 @@
+#!/bin/bash
+#
+# passgen - create strong passwords from easy-to-remember strings
+#
+# This is based on the password generator from the one in JXSelf's post:
+#
+#     https://jxself.org/password-generator.shtml
+#
+# In his original proposal, Jonathan suggests taking a hash of a relatively
+# weak password composed of a password seed (called there a "salt") combined
+# with a service-specific identifier (called a "string") and encoding it with
+# base64 to produce a 32 character strong-looking password.
+#
+# By using multiple hashing (check out the SECLEVEL variable) and then 
+# outputting the final result into base64, the reversibility becomes much 
+# harder. Also, this script makes use of `xsel' to copy the password to the 
+# clipboard if present, and makes a few adjustments to enable compatibility 
+# with Mac OSX.
+#
+#    Copyright (C) 2020 - Pinguim Investidor <https://pinguiminvestidor.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+# This will make finding passgen.py easier wherever you paste the two.
+CWD=${0/$(basename $0)/}
+
+while [ true ];
+do
+    printf "Enter your salt: "
+    read -s SALT
+    printf "\n"
+    printf "Confirm: "
+    read -s SALT_CONFIRM
+    echo -en "\n"
+    if [ "$SALT" == "$SALT_CONFIRM" ]; then
+        break
+    fi
+    echo "Salts don't match. Please try again."
+done
+if [[ -z "$1" ]]
+then
+    printf "Enter your string: "
+    read STRING
+else
+    STRING="$1"
+fi
+
+USERNAME=$(${CWD}/passgen.py -u "$SALT" "$STRING")
+PASSWORD=$(${CWD}/passgen.py "$SALT" "$STRING")
+
+echo "Suggested username: $USERNAME"
+
+if [[ -f /usr/bin/xsel ]]; then
+    printf ${PASSWORD} | xsel -ib
+    printf ${PASSWORD} | xsel -i
+    echo "Password copied to the clipboard." 
+    printf "Clearing automatically in "
+    for i in $(seq 1 10)
+    do
+        printf "$(expr 11 - $i)... "
+        sleep 1
+    done
+    if [[ -f /etc/dictionaries-common/words ]]
+    then
+        # clear the clipboard with a random word!
+        word=$(cat /etc/dictionaries-common/words | shuf | head -1 |
+            tr [A-Z] [a-z] | sed "s/'s//g"
+        )
+        printf $word | xsel -ib
+        printf $word | xsel -i
+    else
+        # boring! Random number for ya
+        printf "$RANDOM" | xsel -ib
+        printf "$RANDOM" | xsel -i
+    fi
+    printf "\n*** Cleared ***\n"
+else
+    echo ${PASSWORD}
+    echo "Copy and press enter to finish"
+    read 
+    # clear screen safely so to make difficult scrolling back to read it.
+    for ((i=0; i < 500; i++))
+    do
+        printf "\n\n\n"
+    done
+    clear
+fi
+

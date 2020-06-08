@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Javascript Password Generator by Pinguim Investidor</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style type="text/css">
+            body {
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+                background: #DDD;
+                color: #444;
+                font-size: 1.3em;
+                margin: 0;
+                padding: 0;
+            }
+            p {
+                line-height: 1.3em;
+            }
+            input {
+                padding: 5px 2px;
+                width: 98%;
+                margin: 3px auto;
+                font-family: monospace;
+                font-size: 1.3em;
+            }
+            input:focus {
+                border: 2px solid #2b2;
+            }
+            a, a:visited {
+                color: #33f;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            @media screen and (min-width: 800px) {
+                body {
+                    width: 790px;
+                    margin: 0 auto;
+                }
+                #trigger {
+                    width: 300px;
+                }
+            }
+            @media screen and (max-width: 800px) {
+                body {
+                    margin: 0 2%;
+                }
+            }
+            #trigger {
+                padding: 10px 5px;
+                margin: 5px 0;
+                background: #F75D5D;
+                text-align: center;
+                color: #FFF;
+                cursor: pointer;
+            }
+            #trigger:active {
+                background: #C74B4B;
+            }
+            noscript {
+                display: block;
+                padding: 7px;
+                margin: 10px 5px;
+                background: #ECF39E;
+                color: #222;
+                line-height: 1.3em;
+            }
+        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="sha256.js"></script>
+    </head>
+    <body>
+        <h1>Javascript Password Generator</h1>
+        <p>
+            SHA-256 Hash of <code>generator.js</code>: 
+            <code>da773157faa0759d5829ed01f444d258b0a2818c73c64dfd388dcc7e5983801f</code>
+            
+        </p>
+        <p>
+            Type your salt (password seed), a service-specific string and 
+            press Enter.
+        </p>
+        <input type="password" placeholder="Your salt" /><br />
+        <input type="text" placeholder="Your string" /><br />
+        <div id="trigger">Generate</div>
+        <p>
+            Your password appears below:
+        </p>
+        <input type="password" id="pwd" placeholder="Press Enter" />
+        <p>
+            Your suggested username is:
+        </p>
+        <input type="text" id="uname" placeholder="Press Enter" />
+        <noscript>
+            <strong>Note:</strong> the generator will not work without Javascript. You can 
+            always inspect the source code yourself (Ctrl+U) to conclude 
+            whether this script contains any malicious bits of code, or visit
+            the code repository (see below) for more information.
+        </noscript>
+        <p>
+            Source for this password generator can be found in my <a 
+            href="https://github.com/pinguiminvestidor/strong-passgen">GitHub</a> repository, licensed under the <a href="http://gnu.org/licenses">
+            GNU GPL v3</a>.
+        </p>
+    <script src="generator.js"></script>
+    </body>
+</html>
